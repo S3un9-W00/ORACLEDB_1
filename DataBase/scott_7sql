@@ -1,0 +1,79 @@
+-- 특정 철자 잘라내기(TRIM. RTRIM, LTRIM)
+SELECT 'smith', LTRIM('smith', 's'), RTRIM('smaith', 'h'), TRIM('s' from 'smiths')
+FROM dual;
+
+-- 실습일 위한 사원 추가
+INSERT INTO emp(empno, ename, sal, job, deptno)
+VALUES (8291, 'JACK ', 3000, 'SALESMAN', 30);
+
+-- JACK 검색
+SELECT ename, sal
+FROM emp
+WHERE ename = 'JACK';
+-- 혹시 모를 공백이 있을 걸 대비하여, 공백을 제거한 후에 검색한다.
+SELECT ename, sal
+FROM emp
+WHERE UPPER(TRIM(ename)) = 'JACK';
+-- JACK 삭제
+DELETE FROM emp WHERE TRIM(ename) = 'JACK';
+
+-- 반올림해서 출력하기(ROUND)
+-- 876.567 숫자를 출력하는데, 소수점 두 번째 자리인 6에서 반올림해서 출력하시오.
+SELECT '876.567', ROUND(876.567, 1) FROM dual;
+-- 8 7 6 . 5 6 7
+--       0 1 2 3
+-- 8   7  6 . 5 6 7
+-- -3 -2 -1 0 1 2 3
+SELECT '876.567', ROUND(876.567, 2) FROM dual;
+SELECT '876.567', ROUND(876.567, -1) FROM dual; 
+SELECT '876.567', ROUND(876.567, -2) FROM dual;
+SELECT '876.567', ROUND(876.567, 0) FROM dual;
+SELECT '876.567', ROUND(876.567) FROM dual;
+
+-- 숫자를 버리고 출력하기 (TRUNC)
+-- 876.567 숫자를 출력하는데, 소수점 두 번째 자리인 6과 그 이후의 숫자들을 모두 버리고 출력하시오.
+SELECT '876.567', TRUNC(876.567, 1) FROM dual;
+
+-- 나눈 나머지 값 출력하기(MOD)
+-- 숫자 10을 3으로 나눈 나머지 값을 출력하시오.
+SELECT MOD(10, 3) FROM dual;
+
+-- 사원들 중 사원 번호가 짝수인 사원들의 사원번호와 이름을 출력하시오.
+SELECT empno, ename
+FROM emp
+WHERE MOD (empno,2) = 0;
+
+-- 10을 3으로 나눈 몫을 구하시오.
+SELECT FLOOR(10/3) FROM dual;
+
+-- 날짜 간 개월 수 출력하기
+-- 오늘 날짜 출력
+SELECT sysdate FROM dual;
+
+-- 이름을 출력하고 입사한 날짜로부터 오늘까지 총 몇 달을 근무했는지 출력하시오.
+SELECT ename, MONTHS_BETWEEN(sysdate, hiredate)
+FROM emp;
+
+-- 내가 태어난지 몇 달 지났는지 확인
+SELECT MONTHS_BETWEEN(sysdate, '08/05/02') FROM dual;
+
+-- 특정 날짜가 있는 달의 마지막 날짜 출력하기
+-- 2019년 5월 22일 해당 달의 마지막 날짜가 어떻게 되는지 출력해보자.
+SELECT '2019/05/22' as 날짜, LAST_DAY ('2019/05/22') as "마지막 날짜" FROM dual;
+-- 이번달이 몇일 남았는지 출력하시오.
+SELECT LAST_DAY(sysdate) - sysdate as "남은 날짜" FROM dual;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,82 @@
+-- 최소값 (MIN)
+-- 직업이 SALESMAN인 사원들 중 최소 월급은 얼마인가?
+SELECT MIN (sal)
+FROM emp
+WHERE job = 'SALESMAN';
+
+-- 직업과 직업별 최소 월급을 출력하는데, 최소 월급이 높은 것 부터 출력하시오.
+SELECT job, MIN(sal) as 최소값
+FROM emp
+GROUP BY job
+ORDER BY 2 DESC;
+
+-- 그룹함수의 특징
+-- WHERE절의 조건이 거짓이여도 결과를 항상 출력한다!!
+SELECT MIN (sal)
+FROM emp
+WHERE 1=2;
+
+-- 직업, 직업별 최소 월급을 출력하는데, 직업에서 SALESMAN은 제외하고 출력하시오.
+-- 최소 월급이 높은 것부터 출력하시오.
+SELECT job, MIN(job) as 최소월급
+FROM emp
+WHERE job != 'SALESMAN'
+GROUP BY job
+ORDER BY 2 DESC;
+
+-- 평균값 구하기 (AVG)
+-- 사원들의 평균 월급을 구하시오.
+SELECT AVG(sal)
+FROM emp;
+
+-- 사원들 커미션의 평균을 구하시오.
+
+-- 1
+SELECT AVG(comn)
+FROM emp;
+
+--2
+SELECT AVG(NVL(comn,0))
+FROM emp;
+
+-- 그룹함수는 null을 무시한다. 그래서 1번 쿼리는 4개의 데이터만 사용하고, 4로 나눈 값을 출력한다.
+-- 우리가 원한 값은 전직원을 대상으로 comm의 평균이므로 2번 쿼리처럼 null을 0으로 치환하여 계산해야 올바른 값이 나온다.
+
+-- 토탈값 출력하기(SUM)
+-- 부서번호와 부서번호를 토탈월급을 출력하시오.
+SELECT deptno, SUM(sal)
+FROM emp
+GROUP BY deptno;
+
+-- 위 쿼리에서 토탈월급이 높은 것부터 출력하시오.
+SELECT deptno, SUM(sal)
+FROM emp
+GROUP BY deptno
+ORDER BY 2 DESC;
+
+-- 직업과 직업별 토탈월급을 출력하는데, 직업별 토탈 월급이 6000 이상인 것만 출력하시오.
+SELECT job, SUM(sal)
+FROM emp
+GROUP BY job
+HAVING SUM(sal) >= 6000;        -- SELECT (SUM) 보다 WHERE이 먼저 실행되므로 오류가 발생. -> HAVING 사용
+
+-- SALESMAN 제외!
+SELECT job, SUM(sal)
+FROM emp
+WHERE job != 'MANAGER'
+GROUP BY job
+HAVING SUM(sal) >= 5000
+ORDER BY 2 DESC;
+-- 실행 순서 : FROM > WHERE > GROUP BY > SELECT > HAVING > ORDER BY(정렬)
+
+
+-- 건수 출력하기 (COUNT)
+-- 전체 사원의 수를 출력하시오.
+SELECT COUNT(*)         -- * : 전체. ALL
+FROM emp;
+
+SELECT COUNT(empno)     -- null x , 중복값 x -> primary key 속성만 가능. / 아무거나 넣을 수 없음.
+FROM emp;
+-- * 보다 'empno' 가 더 빠름.
+
+SELECT * FROM emp;

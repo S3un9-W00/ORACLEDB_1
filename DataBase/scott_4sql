@@ -1,0 +1,22 @@
+-- WHERE절 배우기2 (문자와 날짜 검색)
+-- 이름이 SCOTT인 사원의 이름, 월급, 직업, 입사일, 부서 번호를 출력해보자.
+SELECT ename, sal, job, hiredate, deptno
+FROM emp
+WHERE ename = 'SCOTT';
+-- 쿼리문 자체는 대소문자를 구분없이 사용해도 실행이 되지만, 데이터는 대소문자를 구분해야 한다.
+-- 문자와 날짜는 반드시 작은따옴표(' ')를 사용해야 한다.
+
+SELECT *
+FROM NLS_SESSION_PARAMETERS
+WHERE PARAMETER = 'NLS_DATE_FORMAT';
+-- 현재 데이터베이스의 날짜 형식을 확인하는 쿼리문
+
+-- 날짜 형식 변경
+ALTER SESSION SET NLS_DATE_FORMAT = 'RR/MM/DD';
+
+SELECT hiredate
+FROM emp
+WHERE hiredate = '80/12/17';
+
+-- YY : 2000년대를 기준으로 해석됨 ( 예: '99' -> '2099')
+-- RR : 입력값에 따라 1900년대 또는 2000년대로 자동 변환

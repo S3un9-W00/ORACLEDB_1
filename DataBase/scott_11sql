@@ -1,0 +1,57 @@
+-- 데이터 분석 함수로 순위 출력하기1 (RANK)
+-- 직업의 ANALYST, MANAGER 인 사원들의 이름, 직업, 월급, 월급의 순위를 출력하시오.
+SELECT ename, job, sal,
+       RANK() over (ORDER BY sal DESC) as 순위
+FROM emp
+WHERE job IN ('ANALYST','MANAGER');
+
+-- 중복순위 가능 / 중복순위 만큼 다음 순위를 패스함
+-- 예) 1등 1등 다음이 2등 아니고 3등임!
+
+-- 직업별로 월급이 높은 순서대로 순위를 출력하시오.
+SELECT ename, job, sal,
+       RANK () over (PARTITION BY job ORDER BY sal DESC) as 순위          -- PARTITION은 그룹을 정해주는 것.
+FROM emp;
+
+-- 데이터 분석 함수로 순위 출력하기2 (DENSE_RANK)
+-- 직업의 ANALYST, MANAGER 인 사원들의 이름, 직업, 월급, 월급의 순위를 출력하시오.
+SELECT ename, job, sal,
+        rank () over (ORDER BY sal DESC) as 랭크순위,
+        DENSE_RANK () over (ORDER BY sal DESC) as 댄스랭크        -- 중복 O. 1등 다음엔 2등.
+FROM emp
+WHERE job in ('ANALYST', 'MANAGER');
+
+-- DENSE_RANK() 는 중복순위 가능 / 중복순위 만큼 다음 순위를 패스하지 않음.
+
+-- 랭크함수와 괄호안에 값을 넣고 사용하는 경우
+SELECT sal, DENSE_RANK() over (ORDER BY sal DESC) 순위
+FROM emp;
+
+SELECT DENSE_RANK(2450) within group (ORDER BY sal DESC) 순위
+FROM emp;
+
+-- 출력되는 행 제한하기
+-- 사원 테이블에서 사원번호, 이름, 직업, 월급을 상단 5개만 출력하시오.
+SELECT empno, ename, job, sal
+FROM emp
+WHERE ROWNUM <= 5;
+
+-- 여러 테이블의 데이터를 조인해서 출력하기1 (EQUL JOIN)
+-- 사원 테이블과 부서 테이블 조인하여 이름과 부서위치를 출력해보자.
+SELECT * FROM emp;
+SELECT * FROM dept;
+
+SELECT emp.ename, emp.deptno, dept.deptno, dept.loc
+FROM emp, dept
+WHERE emp.deptno = dept.deptno;            -- WHERE 절이 없으면 잘못된 데이터가 같이 나옴.
+
+SELECT e.ename, d. loc
+FROM emp e, dept d
+WHERE e.deptno = d.deptno;
+
+SELECT ename, d.deptno, d.loc         -- deptno 입력 시 오류. 무조건 뒤에 e & d를 붙여줘야함.
+FROM emp e, dept d
+WHERE e.deptno = d.deptno;
+
+
+

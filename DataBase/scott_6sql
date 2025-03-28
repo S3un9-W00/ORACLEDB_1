@@ -1,0 +1,65 @@
+-- 대소문자 변환 함수 배우기
+-- UFFER, LOWER, INITCAP : 단일행 함수 - 문자 함수
+-- 하나의 행을 입력 받아 하나의 행을 반환하는 함수
+-- 사원 테이블의 이름을 출력하는데, 첫 번째 컬럼은 이름을 모두 대문자로, 두 번째 컬럼은 이름을 모두 소문자로,
+-- 세 번째 컬럼은 이름의 첫 글자는 대문자, 나머지는 소문자로 출력하시오.
+SELECT UPPER(ename), LOWER(ename), INITCAP(ename)
+FROM emp;
+
+-- 이름이 scott인 사원의 이름과 월급을 조회하시오.
+SELECT ename, sal
+FROM emp
+WHERE LOWER(ename) = 'scott';
+-- DB에 이름이 대문자로 저장이 되어있든 소문자로 되어있든 상관없이 나는 오로지 '소문자' 로만 비교하겠다!!
+
+-- 문자에서 특정 철자 추출하기 (SUBSTR)
+-- 영어 단어 SMITH에서 SMI만 잘라내서 출력해보자.
+SELECT SUBSTR('SMITH', 1, 3) FROM dual;
+SELECT SUBSTR('SMITH', 2, 2) FROM dual;
+SELECT SUBSTR('SMITH', -2, 2) FROM dual;
+SELECT SUBSTR('SMITH', 2) FROM dual;
+
+-- 사원의 이름을 출력하는데, 앞에 세개의 철자만 출력하시오.
+SELECT SUBSTR(ename, 1, 3)
+FROM emp;
+
+-- 문자열의 길이를 출력하기(LENGTH)
+-- 이름을 출력하고 그 옆에 이름의 철자 개수를 출력해보자.
+SELECT ename, LENGTH (ename)
+FROM emp;
+
+-- 한글의 경우
+SELECT LENGTH ('가나다라마') FROM dual;
+
+-- byte의 길이를 출력할 때는 LENGTHB() 함수 사용
+SELECT LENGTHB('가나다라마') FROM dual;
+
+-- 문자에서 특정 철자의 위치 출력하기(INSTR)
+-- 사원 이름 SMITH에서 알파벳 철자 M이 몇 번째 자리에 있는지 출력하시오.
+SELECT INSTR ('SMITH','M') FROM dual;
+
+-- sungiltest@naver.com
+-- test@gmail.com
+-- king@sungil-i.kr
+-- 하나의 쿼리문으로 위에 어떤 주소가 모든 도메인만 분리하는 쿼리문을 작성하시오.
+-- sungiltest@naver.com -> naver.com / test@gmail.com -> gmail.com
+SELECT SUBSTR('sungiltest@naver.com', INSTR('sungiltest@naver.com','@')+1) FROM dual;
+
+-- 오른쪽 없애는
+SELECT RTRIM (SUBSTR('sungiltest@naver.com', INSTR('sungiltest@naver.com','@')+1),'.com') FROM dual;
+
+-- 특정 철자를 다른 철자로 변경하기(REPLACE)
+-- 이름과 월급을 출력하는데, 월급을 출력할 때 숫자 0을 별표(*)로 출력해보자.
+SELECT ename, REPLACE(sal, 0, '*') FROM emp;
+
+-- 홍길동 -> 홍00 or 홍0동
+-- 사원 이름의 두 번째 철자만 * 로 표현하시오.
+SELECT REPLACE(ename, SUBSTR(ename, 2, 1), '*')
+FROM emp; 
+
+-- 특정 철자를 N개 만큼 채우기 (LPAD, RPAD)
+-- 이름과 월급을 출력하는데 월급 컬럼의 자릿수를 10자리로 하고, 월급을 출력하고 남은 나머지 자리에
+-- 별표를 채워서 출력해보자.
+SELECT ename, LPAD(sal, 10, '*') as salary1, RPAD (sal, 10, '*') as salary2
+FROM emp;
+

@@ -1,0 +1,77 @@
+-- 문자형으로 데이터 유형 변환하기 (TO_CHAR)
+-- 이름이 SCOTT인 사원의 이름과 입사한 요일을 출력하고 SCOTT의 월급에 천 단위를 구분할 수 있는
+-- 콤마(,)를 붙여서 출력하시오.
+SELECT ename, TO_CHAR(hiredate, 'DAY') as 요일, TO_CHAR(sal, '999,999') as 월급
+FROM emp
+WHERE ename = 'SCOTT';
+-- 숫자형 데이터 유형을 '문자형'으로 변환하거나 날짜형 데이터 유형을 '문자형'으로 변환할 때, 'TO_CHAR' 함수를 사용한다.
+
+-- 날짜형 데이터를 문자형으로 변환하면 활용할 수 있는 것들!!
+SELECT hiredate, TO_CHAR(hiredate, 'RRRR') as 연도, TO_CHAR (hiredate, 'MM') as 월,
+TO_CHAR (hiredate, 'DD') as 일, TO_CHAR (hiredate, 'DAY') as 요일
+FROM emp;
+
+-- 1981년에 입사한 사원들의 이름과 입사일을 출력하시오.
+SELECT ename, hiredate
+FROM emp
+WHERE TO_CHAR (hiredate, 'RRRR') = '1981';
+
+-- 이름과 월급을 출력하는데, 월급을 출력할 때 천 단위를 표시해서 출력하시오.
+SELECT ename, TO_CHAR(sal, '999,999')
+FROM emp;
+-- 숫자 9는 자릿수이고, 이 자리에 0~9까지 어떠한 숫자가 와도 괜찮다는 뜻이다.
+-- 쉼표(,)는 천 단위를 나타내는 표시이다.
+
+-- 천단위, 백만단위까지 표현
+SELECT ename, TO_CHAR(sal * 300, '999,999,999')
+FROM emp;
+
+-- 원화표시 붙이기 (L)
+SELECT ename, TO_CHAR(sal * 300, 'L999,999,999') 
+FROM emp;
+-- 달러표시 붙이기 ($)
+SELECT ename, TO_CHAR(sal * 300, '$999,999,999')
+FROM emp;
+
+-- 날짜형으로 데이터 유형 변환하기(TO_DATE)
+-- 81년 11월 17일에 입사한 사원의 이름과 입사일을 출력하시오.
+SELECT ename, hiredate
+FROM emp
+WHERE hiredate = TO_DATE('81/11/17','RR/MM/DD');  -- hiredate(데이터 타입) / '81/11/17' (String 타입) {강제형변환}
+
+SELECT ename, hiredate
+FROM emp
+WHERE hiredate = '81/11/17';
+
+-- 날짜 형식이 일반적이지 않을 경우 문제점을 확인하기 위해 날짜 형식 변경
+ALTER SESSION SET NLS_DATE_FORMAT = 'DD/MM/RR';
+-- 날짜 형식 되돌리기
+ALTER SESSION SET NLS_DATE_FORMAT = 'RR/MM/DD';
+
+-- NULL 값 대신 다른 데이터 출력하기 (NVL, NVL2)
+-- 이름과 커미션을 출력하는데, 커미션이 NULL인 사원들은 0으로 출력하시오.
+SELECT ename, comn, NVL(comn, 0)
+FROM emp;
+
+SELECT ename, sal, NVL(comn, 0), sal + NVL(comn, 0)
+FROM emp;
+
+-- NVL2 함수 활용 : NVL2(NULL이 있을 수 있는 항목, 해당 항목이 NULL이 아닌 경우 실행, 해당 항목이 NULL일때 실행)
+SELECT ename, sal, comn, NVL2 (comn, sal+comn, sal) -- comn이 null이 아니면 sal+comn. null이면 sal 출력
+FROM emp;
+
+-- IF문을 SQL로 구현하기1 (DECODE)
+-- 부서별로 보너스가 지급이 되었는데, 10번 부서는 300, 20번 부서는 400이고 나머지는 없다.
+-- 사원들에 대해 이름과 부서번호 그리고 보너스를 출력하시오.
+SELECT ename, deptno, DECODE (deptno, 10, 300, 20, 400,0) as bonus -- 10이면 300, 20이면 400, 나머진 0
+FROM emp;
+
+-- 사원들의 사원번호와 이름과 사원번호가 홀수인지 짝수인지 출력하시오.
+-- 조건에 다른 함수가 올 수 있다. 그리고 디폴트값은 생략이 가능하다.
+SELECT empno, ename, DECODE (MOD(empno, 2), 0, '짝수', 1, '홀수')
+FROM emp;
+
+-- 사원들의 이름과 직업과 보너스를 출력하시오.
+-- 보너스는 직업이 SALESMAN이면 5000, 나머지는 2000을 부여하시오.
+SELECT ename, job, DECODE (job, 'SALESMAN','5000','2000') as bonus
+FROM emp;

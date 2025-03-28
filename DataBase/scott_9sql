@@ -1,0 +1,56 @@
+-- DECODE
+-- 모든 데이터베이스에서 지원하는 건 아님!!
+-- 추후 배울 CASE와 달리 제약사항이 있음!!
+-- DECODE(속성이름, 조건1, 값1, 조건2, 값2, ..., 조건n, 값n, 디폴트값)
+-- 부서번호 10인 부서는 보너스를 100 지급, 20인 부서는 보너스를 200 지급한다.
+-- 그래서 부서원을 출력하는데, 이름, 부서번호, 보너스를 출력하시오.
+
+SELECT ename, deptno, DECODE (deptno, 10, 200, 20, 200, 0) as bonus
+FROM emp;
+
+-- IF문을 SQL로 구현하기2 (CASE)
+-- 이름, 직업, 월급, 보너스를 출력하시오.
+-- 보너스는 월급이 3000 이상이면 500, 2000 이상이고 3000미만이면 300,
+-- 1000 이상이고 2000 미만이면 200, 1000 이하는 100
+SELECT ename, job, sal, 
+        CASE WHEN sal >= 3000 THEN 500
+             WHEN sal >= 2000 THEN 300
+             WHEN sal >= 1000 THEN 200
+             ELSE 100 END as bonus
+FROM emp
+WHERE job IN ('SALESMAN', 'ANALYST');
+
+-- 이름, 직업, 커미션, 보너스를 출력하시오.
+-- 보너스는 커미션이 NULL 이면 500, NULL이 아니면 0을 주시오.
+SELECT ename, job, comn,
+       CASE WHEN comn is null then 500
+       ELSE 0 END as bonus
+FROM emp;
+
+-- DECODE는 등호(=) 비교만 가능하지만, CASE는 등호 비교와 부등호 비교 둘 다 가능하다.
+
+-- 이름, 직업, 보너스를 출력하시오.
+-- 보너스는 SALESMAN, ANALYST는 500, CLERK, MANAGER는 400, 나머지는 0을 주시오.
+SELECT ename, job, 
+       CASE WHEN job IN ('SALESMAN', 'ANALYST') THEN 500
+            WHEN job IN ('CLERK', 'MANAGER') THEN 400
+            ELSE 0 END as bonus
+FROM emp;
+
+-- 최대값 출력하기 (MAX)
+-- 사원테이블에서 최대 월급을 출력하시오.
+SELECT MAX (sal)
+FROM emp;
+-- SALESMAN 중에 최대 월급을 출력하시오.
+SELECT MAX(sal)
+FROM emp
+WHERE job = 'SALESMAN';
+
+-- 직업별로 최대 월급을 출력하시오.
+-- 직업, 직업별 최대월급 순으로 출력하시오.
+SELECT job, MAX(sal)
+FROM emp
+GROUP BY job;
+
+SELECT DISTINCT job FROM emp;
+SELECT MAX(sal) FROM emp;
